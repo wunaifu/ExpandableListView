@@ -3,7 +3,9 @@ package com.wnf.expandablelistview;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,23 @@ public class ExpandableListViewActivity extends Activity {
         init();
         loadData();
     }
+    /**
+     * 全部折叠
+     */
+    private void collapseAllGroup() {
+        for (int i = 0; i < groupList.size(); i++) {
+            listView.collapseGroup(i);
+        }
+    }
+
+    /**
+     * 全部展开,
+     */
+    private void expanedAllGroup() {
+        for (int i = 0; i < groupList.size(); i++) {
+            listView.expandGroup(i);
+        }
+    }
 
     private void init() {
         listView = (ExpandableListView) findViewById(R.id.expandableListView);
@@ -38,10 +57,20 @@ public class ExpandableListViewActivity extends Activity {
         //重写OnGroupClickListener，实现当展开时，ExpandableListView不自动滚动
         listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+            public boolean onGroupClick(ExpandableListView parent, View v, final int groupPosition, long id) {
+//                parent.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//                    @Override
+//                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                        Toast.makeText(ExpandableListViewActivity.this,
+//                                "长按"+groupList.get(groupPosition).getName() , Toast.LENGTH_SHORT).show();
+//                        return true;
+//                    }
+//                });
+
                 if (parent.isGroupExpanded(groupPosition)) {
-                    parent.collapseGroup(groupPosition);
+                    parent.collapseGroup(groupPosition);//折叠
                 } else {
+                    collapseAllGroup();//折叠全部
                     //第二个参数false表示展开时是否触发默认滚动动画
                     parent.expandGroup(groupPosition, false);
                 }
@@ -49,6 +78,24 @@ public class ExpandableListViewActivity extends Activity {
                 return true;
             }
         });
+        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, final int groupPosition, final int childPosition, long id) {
+//                parent.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//                    @Override
+//                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                        Toast.makeText(ExpandableListViewActivity.this,
+//                                "长按"+childList.get(groupPosition).get(childPosition).getName() , Toast.LENGTH_SHORT).show();
+//                        return true;
+//                    }
+//                });
+                Toast.makeText(ExpandableListViewActivity.this,
+                        "点击"+childList.get(groupPosition).get(childPosition).getName() , Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
+
     }
 
     private void loadData() {
