@@ -107,7 +107,7 @@ public class ExpandableListViewActivity extends Activity {
                     //根据groupPos及childPos判断你长按的是哪个父项下的哪个子项，然后做相应处理。
                 }
 
-                return false;
+                return true;//返回true，点击事件结束，false，事件持续
             }
         });
     }
