@@ -106,6 +106,8 @@ public class MyExpandableListViewAdapter implements ExpandableListAdapter {
         }
         holder.tv_name.setText(groupData.getName());
         holder.tv_num.setText(groupData.getNum());
+        convertView.setTag(R.id.tv_group_name, groupPosition);
+        convertView.setTag(R.id.tv_child_name, -1);
         return convertView;
     }
 
@@ -127,6 +129,8 @@ public class MyExpandableListViewAdapter implements ExpandableListAdapter {
                 .error(R.mipmap.ic_launcher).into(holder.img);
         holder.tv_name.setText(childData.getName());
         holder.tv_content.setText(childData.getContent());
+        convertView.setTag(R.id.tv_group_name, groupPosition);
+        convertView.setTag(R.id.tv_child_name, childPosition);
         return convertView;
     }
 

@@ -21,7 +21,7 @@ public class ExpandableListViewActivity extends Activity {
     private List<List<ChildData>> childList;
 
     private String[] url;
-
+    private int localPosition = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,21 +81,35 @@ public class ExpandableListViewActivity extends Activity {
         listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, final int groupPosition, final int childPosition, long id) {
-//                parent.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//                    @Override
-//                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                        Toast.makeText(ExpandableListViewActivity.this,
-//                                "长按"+childList.get(groupPosition).get(childPosition).getName() , Toast.LENGTH_SHORT).show();
-//                        return true;
-//                    }
-//                });
+
                 Toast.makeText(ExpandableListViewActivity.this,
                         "点击"+childList.get(groupPosition).get(childPosition).getName() , Toast.LENGTH_SHORT).show();
 
                 return true;
             }
         });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                int groupPos = (Integer)view.getTag(R.id.tv_group_name); //参数值是在setTag时使用的对应资源id号
+                int childPos = (Integer)view.getTag(R.id.tv_child_name);
+                if(childPos == -1){//长按的是父项
+                    Toast.makeText(ExpandableListViewActivity.this,
+                    "父长按"+groupList.get(groupPos).getName() , Toast.LENGTH_SHORT).show();
+                    //根据groupPos判断你长按的是哪个父项，做相应处理（弹框等）
+                } else {
+                    //删除子项重新展开即可
+                    //childList.get(positionGroupFlag).remove(positionChildFlag);
+                    //listView.collapseGroup(positionGroupFlag);
+                    //listView.expandGroup(positionGroupFlag);
+                    Toast.makeText(ExpandableListViewActivity.this,
+                            "子长按"+childList.get(groupPos).get(childPos).getName() , Toast.LENGTH_SHORT).show();
+                    //根据groupPos及childPos判断你长按的是哪个父项下的哪个子项，然后做相应处理。
+                }
 
+                return false;
+            }
+        });
     }
 
     private void loadData() {
